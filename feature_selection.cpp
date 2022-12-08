@@ -103,7 +103,39 @@ void forwardSelection(vector<object>& data) {
 }
 
 void backwardElimination(vector<object>& data) {
-
+    int numFeatures = data.front().features.size();
+    set<int> features;
+    set<int> bestFeatures;
+    double bestAccuracy = -1;
+    for (int i = 0; i < numFeatures; ++i) {
+        features.insert(i);
+    }
+    cout << "Beginning Search." << endl;
+    for (int i = numFeatures - 1; i > 0; --i) {
+        cout << "On the " << i + 1 << "th level of the search tree" << endl;
+        int bestFeature = -1;
+        double currBestAccuracy = -1;
+        for (int j = 0; j < numFeatures; ++j) {
+            if (features.find(j) == features.end()) continue;
+            cout << "Considering removing the " << j + 1 << " feature" << endl;
+            features.erase(j);
+            double accuracy = leaveOneOutCrossValidation(data,features);
+            cout << "Using feature(s) " << setToString(features) << " accuracy is " << accuracy << "%" << endl;
+            features.insert(j);
+            if (accuracy > currBestAccuracy) {
+                currBestAccuracy = accuracy;
+                bestFeature = j;
+            }
+        }
+        features.erase(bestFeature);
+        cout << "On level " << i + 1 << " I removed feature " << bestFeature + 1 << " from current set." << endl;
+        if (currBestAccuracy > bestAccuracy) {
+            bestAccuracy = currBestAccuracy;
+            bestFeatures = features;
+        }
+        cout << "Feature set " << setToString(features) << " was best, accuracy is " << currBestAccuracy << "%" << endl;
+    }
+    cout << "Finished search!! The best feature subset is " << setToString(bestFeatures) << ", which has an accuracy of " << bestAccuracy << "%" << endl;
 }
 
 double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
