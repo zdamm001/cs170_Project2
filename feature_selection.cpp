@@ -61,7 +61,7 @@ int main() {
 string setToString(set<int>& s) {
     string x = "{";
     if (!s.size()) return x + "}";
-    for (auto i : s) x+=to_string(i) + ",";
+    for (auto i : s) x+=to_string(i+1) + ",";
     x.back() = '}';
     return x;
 }
@@ -89,7 +89,7 @@ void forwardSelection(vector<object>& data) {
             }
         }
         features.insert(bestFeature);
-        cout << "On level " << i + 1 << " I added feature " << bestFeature << " to current set." << endl;
+        cout << "On level " << i + 1 << " I added feature " << bestFeature + 1 << " to current set." << endl;
         if (currBestAccuracy > bestAccuracy) {
             bestAccuracy = currBestAccuracy;
             bestFeatures = features;
@@ -105,4 +105,29 @@ void backwardElimination(vector<object>& data) {
 
 double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
     return 0.001;
+    //number_correctly_classfied = 0;
+ 
+    //for i = 1 : size(data,1)
+    //   object_to_classify = data(i,2:end); 
+    //   label_object_to_classify = data(i,1);
+    //   
+    //   nearest_neighbor_distance = inf;
+    //   nearest_neighbor_location = inf;
+    //   for k = 1 : size(data,1)
+    //       if k ~= i
+    //            distance = sqrt(sum((object_to_classify - data(k,2:end)).^2));
+    //            if  distance <   nearest_neighbor_distance
+    //                   nearest_neighbor_distance = distance;
+    //                   nearest_neighbor_location = k;
+    //                   nearest_neighbor_label    = data(nearest_neighbor_location,1);
+    //            end
+    //       end        
+    //   end 
+    //           
+    //   if label_object_to_classify == nearest_neighbor_label; 
+    //        number_correctly_classfied = number_correctly_classfied + 1;
+    //   end
+    //   
+    //end 
+    //accuracy = number_correctly_classfied / size(data,1);
 }
