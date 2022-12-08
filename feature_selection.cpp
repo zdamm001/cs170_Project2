@@ -53,6 +53,13 @@ int main() {
     return 0;
 }
 
+string setToString(set<int>& s) {
+    string x = "{";
+    for (auto i : s) x+=to_string(i) + ",";
+    x.back() = '}';
+    return x;
+}
+
 void forwardSelection(vector<object>& data) {
     int numFeatures = data.front().features.size();
     set<int> features;
@@ -66,7 +73,7 @@ void forwardSelection(vector<object>& data) {
             if (features.find(j) != features.end()) continue;
             cout << "Considering adding the " << j + 1 << "feature" << endl;
             double accuracy = leaveOneOutCrossValidation(data,features,j+1);
-        
+            cout << "Using feature(s) " << setToString(features) << " accuracy is " << accuracy << "%." << endl;
             if (accuracy > bestAccuracy) {
                 bestAccuracy = accuracy;
                 bestFeature = j;
