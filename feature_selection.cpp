@@ -3,6 +3,7 @@
 #include <vector>
 #include <sstream>
 #include <set>
+#include <limits>
 
 using namespace std;
 
@@ -105,29 +106,26 @@ void backwardElimination(vector<object>& data) {
 
 double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
     return 0.001;
-    //number_correctly_classfied = 0;
- 
-    //for i = 1 : size(data,1)
-    //   object_to_classify = data(i,2:end); 
-    //   label_object_to_classify = data(i,1);
-    //   
-    //   nearest_neighbor_distance = inf;
-    //   nearest_neighbor_location = inf;
-    //   for k = 1 : size(data,1)
-    //       if k ~= i
+    int numCorrectlyClassified = 0;
+    for (int i = 0; i < data.size(); ++i) {
+        object objToClassify = data.at(i);
+        double objToClassifyLabel = objToClassify.label;
+        double nearestNeighborDistance = numeric_limits<double>::infinity();
+        double nearestNeighborLocation = numeric_limits<double>::infinity();
+        double nearestNeighborLabel = -1;
+        for (int j = 0; j < data.size(); ++j) {
+            if (j != i) {
     //            distance = sqrt(sum((object_to_classify - data(k,2:end)).^2));
     //            if  distance <   nearest_neighbor_distance
     //                   nearest_neighbor_distance = distance;
     //                   nearest_neighbor_location = k;
     //                   nearest_neighbor_label    = data(nearest_neighbor_location,1);
     //            end
-    //       end        
-    //   end 
-    //           
-    //   if label_object_to_classify == nearest_neighbor_label; 
-    //        number_correctly_classfied = number_correctly_classfied + 1;
-    //   end
-    //   
-    //end 
-    //accuracy = number_correctly_classfied / size(data,1);
+            }      
+        }     
+        if (objToClassifyLabel == nearestNeighborLabel) { 
+            ++numCorrectlyClassified;
+        }
+    }
+    double accuracy = numCorrectlyClassified / data.size();
 }
