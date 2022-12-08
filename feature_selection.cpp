@@ -12,6 +12,11 @@ struct object {
     object(double l) : label(l) { };
 };
 
+string setToString(set<int>&);
+void forwardSelection(vector<object>&);
+void backwardElimination(vector<object>&);
+double leaveOneOutCrossValidation(vector<object>&,set<int>&);
+
 int main() {
     string testFile;
     int choice;
@@ -55,6 +60,7 @@ int main() {
 
 string setToString(set<int>& s) {
     string x = "{";
+    if (!s.size()) return x + "}";
     for (auto i : s) x+=to_string(i) + ",";
     x.back() = '}';
     return x;
@@ -70,10 +76,9 @@ void forwardSelection(vector<object>& data) {
         cout << "On the " << i + 1 << "th level of the search tree" << endl;
         int bestFeature;
         double currBestAccuracy = 0;
-
-        for (int j = 0; j < numFeatures; ++i) {
+        for (int j = 0; j < numFeatures; ++j) {
             if (features.find(j) != features.end()) continue;
-            cout << "Considering adding the " << j + 1 << "feature" << endl;
+            cout << "Considering adding the " << j + 1 << " feature" << endl;
             features.insert(j);
             double accuracy = leaveOneOutCrossValidation(data,features);
             cout << "Using feature(s) " << setToString(features) << " accuracy is " << accuracy << "%" << endl;
@@ -83,6 +88,7 @@ void forwardSelection(vector<object>& data) {
                 bestFeature = j;
             }
         }
+        features.insert(bestFeature);
         cout << "On level " << i + 1 << " I added feature " << bestFeature << " to current set." << endl;
         if (currBestAccuracy > bestAccuracy) {
             bestAccuracy = currBestAccuracy;
@@ -98,5 +104,5 @@ void backwardElimination(vector<object>& data) {
 }
 
 double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
-
+    return 0.001;
 }
