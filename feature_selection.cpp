@@ -63,30 +63,40 @@ string setToString(set<int>& s) {
 void forwardSelection(vector<object>& data) {
     int numFeatures = data.front().features.size();
     set<int> features;
+    set<int> bestFeatures;
+    double bestAccuracy = 0;
     cout << "Beginning Search." << endl;
     for (int i = 0; i < numFeatures; ++i) {
         cout << "On the " << i + 1 << "th level of the search tree" << endl;
         int bestFeature;
-        double bestAccuracy = 0;
+        double currBestAccuracy = 0;
 
         for (int j = 0; j < numFeatures; ++i) {
             if (features.find(j) != features.end()) continue;
             cout << "Considering adding the " << j + 1 << "feature" << endl;
-            double accuracy = leaveOneOutCrossValidation(data,features,j+1);
-            cout << "Using feature(s) " << setToString(features) << " accuracy is " << accuracy << "%." << endl;
-            if (accuracy > bestAccuracy) {
-                bestAccuracy = accuracy;
+            features.insert(j);
+            double accuracy = leaveOneOutCrossValidation(data,features);
+            cout << "Using feature(s) " << setToString(features) << " accuracy is " << accuracy << "%" << endl;
+            features.erase(j);
+            if (accuracy > currBestAccuracy) {
+                currBestAccuracy = accuracy;
                 bestFeature = j;
             }
         }
         cout << "On level " << i + 1 << " I added feature " << bestFeature << " to current set." << endl;
+        if (currBestAccuracy > bestAccuracy) {
+            bestAccuracy = currBestAccuracy;
+            bestFeatures = features;
+        }
+        cout << "Feature set " << setToString(features) << " was best, accuracy is " << currBestAccuracy << "%" << endl;
     }
+    cout << "Finished search!! The best feature subset is " << setToString(bestFeatures) << ", which has an accuracy of " << bestAccuracy << "%" << endl;
 }
 
 void backwardElimination(vector<object>& data) {
 
 }
 
-double leaveOneOutCrossValidation(vector<object>& data, set<int>& features, int num) {
+double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
 
 }
