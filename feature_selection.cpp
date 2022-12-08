@@ -4,6 +4,7 @@
 #include <sstream>
 #include <set>
 #include <limits>
+#include <cmath>
 
 using namespace std;
 
@@ -13,6 +14,7 @@ struct object {
     object(double l) : label(l) { };
 };
 
+double squared(double x) {return x * x;}
 string setToString(set<int>&);
 void forwardSelection(vector<object>&);
 void backwardElimination(vector<object>&);
@@ -105,7 +107,6 @@ void backwardElimination(vector<object>& data) {
 }
 
 double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
-    return 0.001;
     int numCorrectlyClassified = 0;
     for (int i = 0; i < data.size(); ++i) {
         object objToClassify = data.at(i);
@@ -115,12 +116,16 @@ double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
         double nearestNeighborLabel = -1;
         for (int j = 0; j < data.size(); ++j) {
             if (j != i) {
-    //            distance = sqrt(sum((object_to_classify - data(k,2:end)).^2));
-    //            if  distance <   nearest_neighbor_distance
-    //                   nearest_neighbor_distance = distance;
-    //                   nearest_neighbor_location = k;
-    //                   nearest_neighbor_label    = data(nearest_neighbor_location,1);
-    //            end
+                double distance = 0;
+                for (int k = 0; k < objToClassify.features.size(); ++k) {
+                    distance += squared(objToClassify.features.at(k) - data.at(j).features.at(k));
+                }
+                distance = sqrt(distance);
+                if (distance < nearestNeighborDistance) {
+                    nearestNeighborDistance = distance;
+                    nearestNeighborLocation = j;
+                    nearestNeighborLabel = data.at(j).label;
+                }
             }      
         }     
         if (objToClassifyLabel == nearestNeighborLabel) { 
@@ -128,4 +133,5 @@ double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
         }
     }
     double accuracy = numCorrectlyClassified / data.size();
+    return accuracy;
 }
