@@ -56,11 +56,23 @@ int main() {
 void forwardSelection(vector<object>& data) {
     int numFeatures = data.front().features.size();
     set<int> features;
+    cout << "Beginning Search." << endl;
     for (int i = 0; i < numFeatures; ++i) {
         cout << "On the " << i + 1 << "th level of the search tree" << endl;
+        int bestFeature;
+        double bestAccuracy = 0;
+
         for (int j = 0; j < numFeatures; ++i) {
+            if (features.find(j) != features.end()) continue;
             cout << "Considering adding the " << j + 1 << "feature" << endl;
+            double accuracy = leaveOneOutCrossValidation(data,features,j+1);
+        
+            if (accuracy > bestAccuracy) {
+                bestAccuracy = accuracy;
+                bestFeature = j;
+            }
         }
+        cout << "On level " << i + 1 << " I added feature " << bestFeature << " to current set." << endl;
     }
 }
 
@@ -68,6 +80,6 @@ void backwardElimination(vector<object>& data) {
 
 }
 
-void leaveOneOutCrossValidation() {
+double leaveOneOutCrossValidation(vector<object>& data, set<int>& features, int num) {
 
 }
