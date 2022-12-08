@@ -5,6 +5,7 @@
 #include <set>
 #include <limits>
 #include <cmath>
+#include <ctime>
 
 using namespace std;
 
@@ -48,6 +49,7 @@ int main() {
     cout << "2) Backward Elimination" << endl;
     cin >> choice;
     cout << "This dataset has " << data.front().features.size() << " features (not including the class attribute), with " << data.size() << " instances." << endl;
+    clock_t start = clock();
     switch(choice) {
         case 1:
             forwardSelection(data);
@@ -58,6 +60,8 @@ int main() {
         default:
             break;
     }
+    clock_t end = clock();
+    cout << "Total time to complete: " << (end - start) / (double)CLOCKS_PER_SEC << " seconds." << endl;
     return 0;
 }
 
