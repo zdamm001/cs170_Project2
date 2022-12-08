@@ -73,12 +73,12 @@ void forwardSelection(vector<object>& data) {
     int numFeatures = data.front().features.size();
     set<int> features;
     set<int> bestFeatures;
-    double bestAccuracy = 0;
+    double bestAccuracy = -1;
     cout << "Beginning Search." << endl;
     for (int i = 0; i < numFeatures; ++i) {
         cout << "On the " << i + 1 << "th level of the search tree" << endl;
-        int bestFeature;
-        double currBestAccuracy = 0;
+        int bestFeature = -1;
+        double currBestAccuracy = -1;
         for (int j = 0; j < numFeatures; ++j) {
             if (features.find(j) != features.end()) continue;
             cout << "Considering adding the " << j + 1 << " feature" << endl;
@@ -118,6 +118,7 @@ double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
             if (j != i) {
                 double distance = 0;
                 for (int k = 0; k < objToClassify.features.size(); ++k) {
+                    if (features.find(k) == features.end()) continue;
                     distance += squared(objToClassify.features.at(k) - data.at(j).features.at(k));
                 }
                 distance = sqrt(distance);
@@ -132,6 +133,6 @@ double leaveOneOutCrossValidation(vector<object>& data, set<int>& features) {
             ++numCorrectlyClassified;
         }
     }
-    double accuracy = numCorrectlyClassified / data.size();
-    return accuracy;
+    double accuracy = (double) numCorrectlyClassified / data.size();
+    return accuracy * 100;
 }
