@@ -1,7 +1,15 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
+#include <sstream>
 
 using namespace std;
+
+struct object {
+    double label;
+    vector<double> features;
+    object(double l) : label(l) { };
+};
 
 int main() {
     string testFile;
@@ -13,6 +21,18 @@ int main() {
         cout << "Error opening " << testFile << "." << endl;
         exit(EXIT_FAILURE);
     }
+    vector<object> data;
+    string currLine;
+    double label, feature;
+    while(getline(fin, currLine)) {
+        istringstream ssin(currLine);
+        ssin >> label;
+        data.push_back(object(label));
+        while(ssin >> feature) {
+            data.back().features.push_back(feature);
+        }
+    }
+    fin.close();
     cout << "Type the number of the algorithm you want to run." << endl;
     cout << "1) Forward Selection" << endl;
     cout << "2) Backward Elimination" << endl;
