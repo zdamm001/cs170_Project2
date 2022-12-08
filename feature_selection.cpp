@@ -110,6 +110,9 @@ void backwardElimination(vector<object>& data) {
     for (int i = 0; i < numFeatures; ++i) {
         features.insert(i);
     }
+    bestAccuracy = leaveOneOutCrossValidation(data, features);
+    bestFeatures = features;
+    cout << "Using feature(s) " << setToString(bestFeatures) << " accuracy is " << bestAccuracy << "%" << endl;
     cout << "Beginning Search." << endl;
     for (int i = numFeatures - 1; i > 0; --i) {
         cout << "On the " << i + 1 << "th level of the search tree" << endl;
